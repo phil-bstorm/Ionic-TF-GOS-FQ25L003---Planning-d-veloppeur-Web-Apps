@@ -1,10 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActionSheetController, AlertController, IonContent, IonHeader, IonTitle, IonToolbar, IonIcon, IonItem, IonButton, IonInput, IonList, IonListHeader, ToastController } from '@ionic/angular/standalone';
+import { LoadingController, ActionSheetController, AlertController, IonContent, IonHeader, IonTitle, IonToolbar, IonIcon, IonItem, IonButton, IonInput, IonList, IonListHeader, ToastController } from '@ionic/angular/standalone';
 import { cart, add, trash, checkmarkCircle } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
-import { HttpClient } from '@angular/common/http';
+import { ArticleService } from 'src/app/services/article.service';
 
 @Component({
   selector: 'app-product',
@@ -18,15 +18,22 @@ export class ProductPage {
   private toastCtrl = inject(ToastController);
   private alertCtrl = inject(AlertController);
   private actionSheetCtrl = inject(ActionSheetController);
-  private httpClient = inject(HttpClient);
+  private articleService = inject(ArticleService);
+  private loadingCtrl = inject(LoadingController);
 
-  items = signal<any[]>([]);
+  items = this.articleService.items;
   articleName: string|null = null;
 
   constructor() { 
     addIcons({ cart, add, trash, checkmarkCircle });
-    this.httpClient.get<any[]>('http://localhost:3000/article')
-      .subscribe(data => this.items.set(data));
+  }
+
+  private async showLoader() {
+    const loader = await this.loadingCtrl.create({
+      message: 'Chargement en cours'
+    })
+    loader.present();
+    return loader;
   }
 
   async add() {
@@ -40,13 +47,11 @@ export class ProductPage {
       t.present();
       return;
     }
-    this.httpClient.post<any>('http://localhost:3000/article', { 
-        name: this.articleName, 
-        checked: false 
-      }).subscribe(item => {
-        this.items.set([...this.items(), item])
-        this.articleName = null;
-      });
+    const loader = await this.showLoader();
+    this.articleService.addItem(this.articleName).subscribe(_ => {
+      this.articleName = null;
+      loader.dismiss();
+    });
   }
 
   async clearAll() {
@@ -55,7 +60,11 @@ export class ProductPage {
       message: 'Confirmer la suppression de la liste ?',
       buttons: [
         { text: 'Annuler' },
-        { text: 'Confirmer', handler: () => this.items.set([]) }
+        { text: 'Confirmer', handler: async () => {
+          const loader = await this.showLoader();
+          this.articleService.removeAll()
+            .subscribe(() => loader.dismiss());
+        } }
       ]
     })
     alert.present();
@@ -64,20 +73,16 @@ export class ProductPage {
   async showActions(item: any) {
     const as = await this.actionSheetCtrl.create({
       buttons: [
-        { text: 'Cocher ou Décocher', handler: () => {
+        { text: 'Cocher ou Décocher', handler: async () => {
           item.checked = !item.checked;
-          this.httpClient.put('http://localhost:3000/article/' + item.id, item)
-            .subscribe(_ => {
-              this.items.set([...this.items()]);
-            })
+          const loader = await this.showLoader()
+          this.articleService.updateItem(item)
+            .subscribe(() => loader.dismiss());
         } },
-        { text: 'Supprimer', role: 'destructive', handler: () => {
-          // suppression serveur
-          this.httpClient.delete('http://localhost:3000/article/' + item.id)
-            .subscribe(_ => {
-              // suppression locale
-              this.items.set(this.items().filter(i => i !== item));
-            })
+        { text: 'Supprimer', role: 'destructive', handler: async () => {
+          const loader = await this.showLoader();
+          this.articleService.removeItem(item)
+            .subscribe(() => loader.dismiss());
         } }
       ]
     });
