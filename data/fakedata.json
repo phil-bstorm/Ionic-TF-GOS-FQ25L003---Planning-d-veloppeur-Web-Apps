@@ -1,0 +1,29 @@
+{
+  "article": [
+    {
+      "id": "ec7e",
+      "name": "Sel",
+      "checked": false
+    },
+    {
+      "id": "c4b8",
+      "name": "Poivre",
+      "checked": false
+    },
+    {
+      "id": "fab7",
+      "name": "Sucre",
+      "checked": false
+    },
+    {
+      "id": "45db",
+      "name": "Paprika",
+      "checked": false
+    },
+    {
+      "id": "f9ba",
+      "name": "savon",
+      "checked": false
+    }
+  ]
+}
