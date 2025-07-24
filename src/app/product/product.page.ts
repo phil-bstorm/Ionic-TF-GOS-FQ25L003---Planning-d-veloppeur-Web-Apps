@@ -25,7 +25,7 @@ export class ProductPage {
 
   constructor() { 
     addIcons({ cart, add, trash, checkmarkCircle });
-    this.httpClient.get<any[]>('http://192.168.137.1:3000/article')
+    this.httpClient.get<any[]>('http://localhost:3000/article')
       .subscribe(data => this.items.set(data));
   }
 
@@ -40,7 +40,7 @@ export class ProductPage {
       t.present();
       return;
     }
-    this.httpClient.post<any>('http://192.168.137.1:3000/article', { 
+    this.httpClient.post<any>('http://localhost:3000/article', { 
         name: this.articleName, 
         checked: false 
       }).subscribe(item => {
@@ -66,10 +66,18 @@ export class ProductPage {
       buttons: [
         { text: 'Cocher ou Décocher', handler: () => {
           item.checked = !item.checked;
-          this.items.set([...this.items()]);
+          this.httpClient.put('http://localhost:3000/article/' + item.id, item)
+            .subscribe(_ => {
+              this.items.set([...this.items()]);
+            })
         } },
-        { text: 'Supprimer', handler: () => {
-          this.items.set(this.items().filter(i => i !== item));
+        { text: 'Supprimer', role: 'destructive', handler: () => {
+          // suppression serveur
+          this.httpClient.delete('http://localhost:3000/article/' + item.id)
+            .subscribe(_ => {
+              // suppression locale
+              this.items.set(this.items().filter(i => i !== item));
+            })
         } }
       ]
     });

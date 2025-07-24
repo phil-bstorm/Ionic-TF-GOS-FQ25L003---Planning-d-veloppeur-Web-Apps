@@ -8,7 +8,7 @@
     {
       "id": "c4b8",
       "name": "Poivre",
-      "checked": false
+      "checked": true
     },
     {
       "id": "fab7",
@@ -18,12 +18,7 @@
     {
       "id": "45db",
       "name": "Paprika",
-      "checked": false
-    },
-    {
-      "id": "f9ba",
-      "name": "savon",
-      "checked": false
+      "checked": true
     }
   ]
 }
