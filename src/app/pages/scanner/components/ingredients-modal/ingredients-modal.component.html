@@ -1,0 +1,12 @@
+<ion-header>
+  <ion-toolbar class="ion-padding">
+    <ion-icon size="large" name="arrow-back" (click)="close()"></ion-icon>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <ion-list>
+    @for (item of ingredients; track item) {
+      <ion-item>{{ item.text }}</ion-item>
+    }
+  </ion-list>
+</ion-content>

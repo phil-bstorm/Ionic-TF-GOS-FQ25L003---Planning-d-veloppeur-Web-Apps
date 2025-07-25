@@ -4,6 +4,34 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-button (click)="scan()">Start Scan</ion-button>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-button color="tertiary" (click)="scan()"><ion-icon name="scan"></ion-icon></ion-button>
+  @if(result()) {
+    @if(product){
+      <h1>{{ product.product_name }}</h1>
+      <img [src]="product.image_url">
+      <h2>Nutriscore: {{product.nutriscore_grade}}</h2>
+      <ion-fab slot="fixed" vertical="top" horizontal="end">
+        <ion-fab-button>
+          <ion-icon name="chevron-down-circle"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-list side="bottom">
+          <ion-fab-button (click)="openIngredientsModal()">
+            <ion-icon name="list"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-button (click)="openAllergensModal()">
+            <ion-icon name="skull"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-button (click)="addToCart()">
+            <ion-icon name="add"></ion-icon>
+          </ion-fab-button>
+        </ion-fab-list>
+      </ion-fab>
+    } @else {
+      <p>Aucun produit trouvé</p>
+    }
+  } @else {
+    <p>Scanner un codebarre</p>
+  }
+
 </ion-content>
