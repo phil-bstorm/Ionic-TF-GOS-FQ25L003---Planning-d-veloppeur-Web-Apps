@@ -18,4 +18,8 @@ export const routes: Routes = [
     path: 'scanner',
     loadComponent: () => import('./pages/scanner/scanner.page').then( m => m.ScannerPage)
   },
+  {
+    path: 'camera',
+    loadComponent: () => import('./pages/camera/camera.page').then( m => m.CameraPage)
+  },
 ];
