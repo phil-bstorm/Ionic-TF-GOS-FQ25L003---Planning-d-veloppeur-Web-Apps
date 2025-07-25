@@ -5,7 +5,7 @@ import { forkJoin, Observable, tap } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
 export class ArticleService {
-    private readonly baseUrl = 'http://localhost:3000/article/';
+    private readonly baseUrl = 'http://192.168.137.1:3000/article/';
     private readonly httpClient = inject(HttpClient);
 
     items = signal<Article[]>([]);

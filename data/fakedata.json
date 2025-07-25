@@ -1,3 +1,14 @@
 {
-  "article": []
+  "article": [
+    {
+      "id": "ce71",
+      "name": "Poivre",
+      "checked": false
+    },
+    {
+      "id": "c2f1",
+      "name": "Sel",
+      "checked": false
+    }
+  ]
 }
