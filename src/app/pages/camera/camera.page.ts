@@ -35,7 +35,10 @@ export class CameraPage implements OnInit {
       loader.present();
       this.completionService.getDenomination(result.base64String).pipe(
         tap(console.log),
-        switchMap((result: any) => this.completionService.getEan(JSON.parse(result.choices[0].message.content).denomination))
+        switchMap((result: any) => this.completionService.getEan(
+          // le message est en json, il faut le parser
+          JSON.parse(result.choices[0].message.content).denomination
+        ))
       ).subscribe((result: any) => {
         loader.dismiss();
         console.log(console.log(JSON.parse(result.choices[0].message.content)))
