@@ -12,7 +12,7 @@ export class CompletionService {
         return this.httpClient.post('https://api.openai.com/v1/chat/completions',{
             model: 'gpt-4o',
             messages: [
-                { role: 'system', content: 'L\'utilisateur va t\'envoyer une image, tu devras chercher sur internet et lui donner la denomination du produit' },
+                { role: 'system', content: 'L\'utilisateur va t\'envoyer une image, tu devras lui donner la denomination du produit' },
                 { 
                     role: 'user', 
                     content: [{
