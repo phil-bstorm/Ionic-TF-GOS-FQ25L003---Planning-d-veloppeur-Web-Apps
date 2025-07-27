@@ -1,8 +1,10 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton } from '@ionic/angular/standalone';
 import { Camera, CameraResultType } from '@capacitor/camera';
+import { CompletionService } from 'src/app/services/completion.service';
+import { switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-camera',
@@ -13,8 +15,7 @@ import { Camera, CameraResultType } from '@capacitor/camera';
 })
 export class CameraPage implements OnInit {
 
-
-  imageUrl = signal<string>('');
+  private readonly completionService = inject(CompletionService);
 
   constructor() { }
 
@@ -26,7 +27,14 @@ export class CameraPage implements OnInit {
     const result = await Camera.getPhoto({ 
       resultType: CameraResultType.Base64 
     })
-    this.imageUrl.set('data:image/jpeg;base64,' + result.base64String);
+    if(result.base64String) {
+      this.completionService.getDenomination(result.base64String).pipe(
+        tap(console.log),
+        switchMap((result: any) => this.completionService.getEan(JSON.parse(result.choices[0].message.content).denomination))
+      ).subscribe((result: any) => {
+        console.log(console.log(JSON.parse(result.choices[0].message.content)))
+      })
+    }
   }
 
 }
