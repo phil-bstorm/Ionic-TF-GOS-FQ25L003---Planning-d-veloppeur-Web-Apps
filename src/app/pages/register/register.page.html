@@ -1,0 +1,30 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>register</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmitRegister()">
+    <ion-item>
+      <ion-label for="email">Email:</ion-label>
+      <ion-input id="email" formControlName="email"></ion-input>
+      @if( registerForm.get("email")?.touched &&
+      registerForm.get("email")?.invalid ){
+      <p>Email invalide :(</p>
+      }
+    </ion-item>
+    <ion-item>
+      <ion-label for="password">Password:</ion-label>
+      <ion-input id="password" formControlName="password"></ion-input>
+      @if( registerForm.get("password")?.touched &&
+      registerForm.get("password")?.invalid ){
+      <p>password invalide :(</p>
+      }
+    </ion-item>
+
+    <ion-button type="submit" [disabled]="registerForm.invalid">
+      Register !
+    </ion-button>
+  </form>
+</ion-content>

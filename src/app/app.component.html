@@ -19,6 +19,21 @@
         <ion-icon name="camera"></ion-icon>
         Prendre une photo
       </ion-tab-button>
+      @if(token()){
+      <ion-tab-button>
+        <ion-icon name="key"></ion-icon>
+        logout
+      </ion-tab-button>
+      }@else {
+      <ion-tab-button tab="register">
+        <ion-icon name="key"></ion-icon>
+        register
+      </ion-tab-button>
+      <ion-tab-button tab="login">
+        <ion-icon name="key"></ion-icon>
+        login
+      </ion-tab-button>
+      }
     </ion-tab-bar>
   </ion-tabs>
 </ion-app>
